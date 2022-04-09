@@ -3,7 +3,7 @@ const app=express();
 const bodyParser=require('body-parser');
 const SpaceX=require('./mongo.js')
 const mongoose=require('mongoose');
-const key=require('./config/key')
+
 const fetch=require('node-fetch')
 const cors=require('cors')
 app.listen(3000,()=>{
@@ -21,11 +21,6 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
-mongoose.connect(key.database)
-mongoose.connection.on('connected',()=>{
-    console.log("connected to db")
-})
 
 app.get('/api',async (req,res)=>{
     const response=await fetch('https://api.spacexdata.com/v2/launches')
@@ -45,7 +40,6 @@ app.post('/api',async (req,res)=>{
         missionName:data.mission_name,
         missionPatchLink:data.links.mission_patch
         })
-        space.save().then(res=>console.log(res))
     });
    
 })
